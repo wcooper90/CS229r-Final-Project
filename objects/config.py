@@ -4,7 +4,7 @@ class CONFIGURATION:
     debugging = True
 
     # these 3 parameters are also in main.py
-    SIMULATION_LENGTH = 300
+    SIMULATION_LENGTH = 1000
     INITIAL_GENOME_LENGTH = 64
     NUM_ANCESTORS = 10
 
@@ -45,7 +45,7 @@ class CONFIGURATION:
     genome_length_variability = 5
 
     # population cap; probability of children in a time step being born is (maximum_population - alive avidians) / maximum_population
-    maximum_population = 400
+    maximum_population = 1000
 
     # half a child object can only spend up to this many time steps in the reproduction center
     maximum_time_steps_in_reproduction_center = 5

@@ -6,11 +6,12 @@ import random
 
 class Avidian:
 
-    def __init__(self, id, genome_instructions, env, reproduction_type):
+    def __init__(self, id, genome_instructions, env, reproduction_type, parents=None, time_step=0):
         # configuration
         self.config = CONFIGURATION
         self.id = id
         self.env = env
+        self.time_step = time_step
 
         # avidian attributes
         self.is_alive = True
@@ -24,6 +25,8 @@ class Avidian:
 
         # creating variable for copy of instructions to child genome
         self.child_genome = []
+        # keep track of who is the parent (tuple of one or two ids)
+        self.parents = parents
 
         # digital organism energy, allow for some variation
         self.SIPS = random.randint(self.config.initial_sips - self.config.intial_sips_variation, self.config.initial_sips + self.config.intial_sips_variation)

@@ -22,23 +22,23 @@ class ReproductionCenter():
                                 if_label, set_flow]
 
     # main handler
-    def process(self, new_avidians_info, vCPU):
+    def process(self, new_avidians_info, vCPU, time):
         if self.reproduction_type == REPRODUCTION_TYPE(1):
-            return self._process_asexual(new_avidians_info, vCPU)
+            return self._process_asexual(new_avidians_info, vCPU, time)
         elif self.reproduction_type == REPRODUCTION_TYPE(2):
-            return self._process_sexual_no_sexes(new_avidians_info, vCPU)
+            return self._process_sexual_no_sexes(new_avidians_info, vCPU, time)
         else:
-            return self._process_sexual_with_sexes(new_avidians_info, vCPU)
+            return self._process_sexual_with_sexes(new_avidians_info, vCPU, time)
 
 
     # create new avidians asexually
-    def _process_asexual(self, new_avidians_info, vCPU):
+    def _process_asexual(self, new_avidians_info, vCPU, time):
         new_avidians = []
         for values in new_avidians_info:
             # mutate genome
             mutated_genome = self._mutate_genome(values[0])
             # create new object
-            new_avidian_object = Avidian(vCPU.num_avidians, mutated_genome, values[1], self.reproduction_type)
+            new_avidian_object = Avidian(vCPU.num_avidians, mutated_genome, values[1], self.reproduction_type, (values[3]), time)
             new_avidians.append(new_avidian_object)
             vCPU.num_avidians += 1
         # return the list of new avidian objects and an empty list, because in asexual reproduction
@@ -47,7 +47,7 @@ class ReproductionCenter():
 
 
     # create new avidians sexually, sexes of the parents do not matter
-    def _process_sexual_no_sexes(self, new_avidians_info, vCPU):
+    def _process_sexual_no_sexes(self, new_avidians_info, vCPU, time):
         new_avidians = []
         compatible = []
         counter = 0
@@ -56,7 +56,8 @@ class ReproductionCenter():
                 # if there is a compatible partner, combine genomes, mutate, and create child obejct
                 new_genome = self._combine_genomes(new_avidians_info[counter][0], compatible[0][0])
                 mutated_genome = self._mutate_genome(new_genome)
-                new_avidian_object = Avidian(vCPU.num_avidians, mutated_genome, new_avidians_info[counter][1], self.reproduction_type)
+                new_avidian_object = Avidian(vCPU.num_avidians, mutated_genome, new_avidians_info[counter][1],
+                                                self.reproduction_type, (new_avidians_info[counter][3], compatible[0][3]), time)
                 new_avidians.append(new_avidian_object)
                 vCPU.num_avidians += 1
                 compatible = []
@@ -70,7 +71,7 @@ class ReproductionCenter():
 
 
     # create new avidians sexually, sexes of the parents do now must be compatible
-    def _process_sexual_with_sexes(self, new_avidians_info, vCPU):
+    def _process_sexual_with_sexes(self, new_avidians_info, vCPU, time):
         new_avidians = []
         compatible = []
         counter = 0
@@ -94,10 +95,11 @@ class ReproductionCenter():
 
                 # delete object if it's been matched, mutate genome, create new opject, and udpate avidian counter
                 if delete_compatible_object_flag:
-                    del compatible[delete_object_idx]
                     mutated_genome = self._mutate_genome(new_genome)
-                    new_avidian_object = Avidian(vCPU.num_avidians, mutated_genome, values[1], self.reproduction_type)
+                    new_avidian_object = Avidian(vCPU.num_avidians, mutated_genome, values[1],
+                                                    self.reproduction_type, (new_avidians_info[counter][3], compatible[i][3]), time)
                     new_avidians.append(new_avidian_object)
+                    del compatible[delete_object_idx]
                     vCPU.num_avidians += 1
 
                 # if there's no match, put this specimen back into compatible list
