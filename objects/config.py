@@ -1,10 +1,10 @@
 class CONFIGURATION:
     # toggle debugging, creates random debugging instances of avidians throughout
     # simulation for a closer look
-    debugging = False
+    debugging = True
 
     # these 3 parameters are also in main.py
-    SIMULATION_LENGTH = 10000
+    SIMULATION_LENGTH = 300
     INITIAL_GENOME_LENGTH = 64
     NUM_ANCESTORS = 10
 

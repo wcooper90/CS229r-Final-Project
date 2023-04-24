@@ -63,6 +63,7 @@ def run_simulation(avidians, vCPU, t_end, reproduction_center):
         print("_"*80)
         print('Finished iteration ' + str(time))
         print_stats(vCPU, avidians)
-        # for debugger in debuggers:
-        #     if debugger.avidian.is_alive:
-        #         debugger._print_instruction_history()
+        for debugger in debuggers:
+            if debugger.avidian.is_alive:
+                debugger._print_instruction_history()
+                debugger._print_reproductive_capacity() 

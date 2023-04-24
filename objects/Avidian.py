@@ -49,8 +49,8 @@ class Avidian:
         self.read_head = 0
         self.flow_head = 0
 
-        # next environment inputs
-        self.env_input_1, self.env_input_2 = self.env.generate_environment(), self.env.generate_environment()
+        # next environment inputs, assume that these environment variables were immediately loaded to registers B and C
+        self.env_input_1, self.env_input_2 = self.register_B.val, self.register_C.val
 
         # keep track of logical operators this object has already satisfied
         self.operands_achieved = []

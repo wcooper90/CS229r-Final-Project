@@ -73,7 +73,7 @@ class SharedCPU:
         # keep track of necessary variables locally, update environmental inputs of avidian for following steps
         env_input_1, env_input_2 = avidian.env_input_1, avidian.env_input_2
         avidian.env_input_1 = avidian.env_input_2
-        avidian.env_input_1 = avidian.env.generate_environment()
+        avidian.env_input_2 = avidian.env.generate_environment()
 
         # iterate through logic operators to check for matches
         for tup in self.logic_operators:

@@ -182,7 +182,7 @@ def sub(avidian):
     register.val = out
 
 
-# return BX, generate a new input from environment to go into BX
+# output value from a register, generate a new input from environment to go into the register
 def IO(avidian):
     # check which register to operate on
     register, _ = check_nop(avidian)
