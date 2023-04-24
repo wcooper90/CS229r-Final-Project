@@ -25,9 +25,10 @@ class Avidian:
         # creating variable for copy of instructions to child genome
         self.child_genome = []
 
-        # digital organism energy
-        self.SIPS = self.config.initial_sips
-        self.computational_merit = self.config.initial_computational_merit
+        # digital organism energy, allow for some variation
+        self.SIPS = random.randint(self.config.initial_sips - self.config.intial_sips_variation, self.config.initial_sips + self.config.intial_sips_variation)
+        self.computational_merit = random.randint(self.config.initial_computational_merit - self.config.initial_computational_merit_variation,
+                                                    self.config.initial_computational_merit + self.config.initial_computational_merit_variation)
 
         # stacks
         self.stack1 = []
@@ -54,8 +55,19 @@ class Avidian:
         # keep track of logical operators this object has already satisfied
         self.operands_achieved = []
 
+        # set to config variable when a child is had
+        self.reproduction_cooldown = 0
+
+        # if debugging is on, keep track of the instructions this avidian executed in the last time step
+        if self.config.debugging:
+            self.instruction_history = []
+
 
     # compute the next instruction
     def _step(self, env):
+        # if debugging is on, keep track of instructions this avidian executes in this time step
+        if self.config.debugging:
+            self.instruction_history.append((self.instruction_pointer, self.genome[self.instruction_pointer]))
+
         step_result = self.genome[self.instruction_pointer](self)
         return step_result

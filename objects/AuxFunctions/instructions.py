@@ -249,8 +249,10 @@ def h_alloc(avidian):
 
     # if above energy (SIPS) threshold, and passes probability of reproduction threshold, set is_fertile to True
     if avidian.SIPS > config.SIP_reproduction_threshold:
-        if random.random() > config.probability_of_reproduction:
-            avidian.is_fertile = True
+        # if the avidian did not recently have a child
+        if avidian.reproduction_cooldown == 0:
+            if random.random() > config.probability_of_reproduction:
+                avidian.is_fertile = True
 
 
 # splits off new offspring if child_genome exists, sets parent back to default settings
@@ -262,6 +264,9 @@ def h_divide(avidian):
         # reset parent attributes
         avidian.child_genome = []
         avidian.is_fertile = False
+
+        # set cooldown
+        avidian.reproduction_cooldown = avidian.config.reproduction_cooldown
         return child
 
 

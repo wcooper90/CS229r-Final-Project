@@ -3,6 +3,7 @@ from .nop_instructions import *
 import random
 
 
+# look ahead in the instruction set of the given Avidian to see if there's a nop that effects the current instruction 
 def check_nop(avidian):
     register = avidian.register_B
     # default head is instruction pointer

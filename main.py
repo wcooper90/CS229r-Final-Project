@@ -4,13 +4,17 @@ from objects.GenomicInstructions import GenomicInstructions
 from objects.Environment import Environment
 from objects.ReproductionTypeEnum import REPRODUCTION_TYPE
 from objects.ReproductionCenter import ReproductionCenter
+from objects.config import CONFIGURATION
 from run_simulation import run_simulation
 
 
+# connect to configuration file
+config = CONFIGURATION()
+
 # these are here for easy access, more parameters can be found in >objects>config.py
-SIMULATION_LENGTH = 1000
-INITIAL_GENOME_LENGTH = 64
-NUM_ANCESTORS = 10
+SIMULATION_LENGTH = config.SIMULATION_LENGTH
+INITIAL_GENOME_LENGTH = config.INITIAL_GENOME_LENGTH
+NUM_ANCESTORS = config.NUM_ANCESTORS
 
 # reproduction type can be ASEX (asexual), SEX_NO_SEXES (sexual but does not distinguish between male and female),
 # and SEX_WITH_SEXES (sexual, where only males and females are copatible)

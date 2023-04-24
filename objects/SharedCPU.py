@@ -2,7 +2,7 @@ from .AuxFunctions.logic_operators import *
 from .Avidian import Avidian
 
 
-# vCPU to simulate population of avidians 
+# vCPU to simulate population of avidians
 class SharedCPU:
 
     def __init__(self, num_avidians, reproduction_type):
@@ -17,6 +17,11 @@ class SharedCPU:
 
     # iterate through one time step for all avidians
     def compute_time_step(self, avidian, env):
+
+        # if debugging is on, reset instruction history at every step
+        if avidian.config.debugging:
+            avidian.instruction_history = []
+
         # new_offspring to be returned to main script, if applicable
         new_offspring_info = []
 
@@ -24,11 +29,15 @@ class SharedCPU:
         if not avidian.is_alive:
             return []
 
+        # if there is a reproduction cooldown, lower it
+        if avidian.reproduction_cooldown > 0:
+            avidian.reproduction_cooldown -= 1
+
         # execute as many sequential instructions as computational merit allows
         for i in range(avidian.computational_merit):
 
             # wrap around instruction set
-            if avidian.instruction_pointer == len(avidian.genome):
+            if avidian.instruction_pointer >= len(avidian.genome):
                 avidian.instruction_pointer = 0
 
             # checks if IO instruction was written, or if new offspring occurred
@@ -44,7 +53,7 @@ class SharedCPU:
             avidian.SIPS -= 1
             if avidian.SIPS <= 0:
                 avidian.is_alive = False
-                print('Avidian ' + str(avidian.id) + ' is dead. ')
+                # print('Avidian ' + str(avidian.id) + ' ran out of sips! he thirsty! ')
                 return []
 
         # return a list of new offspring to main script, if applicable
@@ -72,5 +81,8 @@ class SharedCPU:
             # only compute if this object has not yet achieved the new logical operator capability
             if func not in avidian.operands_achieved:
                 if step_result == func(env_input_1, env_input_2):
+                    print("Avidian " + str(avidian.id) + " achieved " + str(func) + "!")
                     avidian.computational_merit *= reward
                     avidian.operands_achieved.append(func)
+                    # give this avidian some extra sips, proprotional to reward
+                    avidian.SIPS += avidian.SIPS * reward / 16
