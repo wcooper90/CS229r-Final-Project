@@ -1,5 +1,6 @@
 from .instructions import *
 from .nop_instructions import *
+import random
 
 
 def check_nop(avidian):
@@ -27,11 +28,21 @@ def check_nop(avidian):
 
 
 # input of binary string, standardizes it to the correct length
-def standarize_register_value_length(val, register_length):
-    # val should not be longer than the register length already
-    assert(len(val) <= register_length)
-    zeros = register_length - len(val)
-    appended = ""
-    for z in range(zeros):
-        appended += "0"
-    return appended + val
+def standardize_register_value_length(val, register_length):
+
+    # temporary fix, because sometimes the incoming value will be a negative binary number
+    if val[0] == "-":
+        val = val[1:]
+
+    # if binary string is too larger for the register, truncate the right side
+    # TODO; figure out a better mechanism for this?
+    if len(val) > register_length:
+        return val[:register_length]
+
+    # otherwise, pad the left size with zeros
+    else:
+        zeros = register_length - len(val)
+        appended = ""
+        for z in range(zeros):
+            appended += "0"
+        return appended + val

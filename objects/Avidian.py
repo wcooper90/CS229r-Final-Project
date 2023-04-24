@@ -1,15 +1,29 @@
 from .config import CONFIGURATION
 from .Register import Register
+from .ReproductionTypeEnum import REPRODUCTION_TYPE
+import random
 
 
 class Avidian:
 
-    def __init__(self, id, genome_instructions, env):
+    def __init__(self, id, genome_instructions, env, reproduction_type):
         # configuration
         self.config = CONFIGURATION
-        self.is_alive = True
         self.id = id
         self.env = env
+
+        # avidian attributes
+        self.is_alive = True
+        self.is_fertile = False
+        self.reproduction_type = reproduction_type
+
+        # if simulation type is reproduction separated by sex, assign sex randomly
+        self.sex = None
+        if reproduction_type == REPRODUCTION_TYPE(3):
+            self.sex = 'M' if random.random() > 0.5 else 'F'
+
+        # creating variable for copy of instructions to child genome
+        self.child_genome = []
 
         # digital organism energy
         self.SIPS = self.config.initial_sips
@@ -36,6 +50,9 @@ class Avidian:
 
         # next environment inputs
         self.env_input_1, self.env_input_2 = self.env.generate_environment(), self.env.generate_environment()
+
+        # keep track of logical operators this object has already satisfied
+        self.operands_achieved = []
 
 
     # compute the next instruction
