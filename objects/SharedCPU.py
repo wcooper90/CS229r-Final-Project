@@ -92,8 +92,8 @@ class SharedCPU:
             # only compute if this object has not yet achieved the new logical operator capability
             if func not in avidian.operands_achieved:
                 if step_result == func(env_input_1, env_input_2):
-                    print("Avidian " + str(avidian.id) + " achieved " + str(func) + "!")
+                    # print("Avidian " + str(avidian.id) + " achieved " + str(func.__name__) + "!")
                     avidian.computational_merit *= reward
                     avidian.operands_achieved.append(func)
                     # give this avidian some extra sips, proportional to increase in computational merit
-                    avidian.SIPS += avidian.SIPS * reward * 2
+                    avidian.SIPS += avidian.SIPS * (reward ** 2)

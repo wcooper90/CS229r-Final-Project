@@ -19,7 +19,7 @@ NUM_ANCESTORS = config.NUM_ANCESTORS
 
 # reproduction type can be ASEX (asexual), SEX_NO_SEXES (sexual but does not distinguish between male and female),
 # and SEX_WITH_SEXES (sexual, where only males and females are copatible)
-reproduction_type = REPRODUCTION_TYPE.SEX_NO_SEXES
+reproduction_type = REPRODUCTION_TYPE.ASEX
 
 # environment generates random binary strings as inputs for Avidians
 env = Environment()
@@ -39,7 +39,13 @@ data_tracker = DataTracker()
 # intialize ancestors
 avidians = []
 for i in range(NUM_ANCESTORS):
-    new_genome = genomic_instructions.generate_random_initial_instructions(INITIAL_GENOME_LENGTH)
+    # generate test sample instructions
+    # new_genome = genomic_instructions.generate_test_initial_instructions(INITIAL_GENOME_LENGTH)
+
+    # generate default initial instructions
+    new_genome = genomic_instructions.generate_ancestral_instructions(INITIAL_GENOME_LENGTH)
+
+    # create new ancestor Avidian object
     avidians.append(Avidian(i, new_genome, env, reproduction_type, time_step=0))
 
 # initialize vCPU

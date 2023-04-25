@@ -5,6 +5,8 @@ from analysis.stats_printer import print_stats
 import numpy as np
 import random
 
+DEBUG = False
+
 
 def run_simulation(avidians, vCPU, t_end, reproduction_center, data_tracker=None):
 
@@ -44,6 +46,8 @@ def run_simulation(avidians, vCPU, t_end, reproduction_center, data_tracker=None
 
         # probability of successful set of child objects created
         prob_child_success = max((config.maximum_population - num_alive_avidians) / config.maximum_population, 0)
+        # print(prob_child_success)
+        # print("num_alive: " + str(num_alive_avidians))
 
         # if the maximum population has not been reached, continue making children objects
         if random.random() < prob_child_success:
@@ -61,10 +65,10 @@ def run_simulation(avidians, vCPU, t_end, reproduction_center, data_tracker=None
         time += 1
 
         # debugging space
-        print("_"*80)
-        print('Finished iteration ' + str(time))
-
         if time % 10 == 0:
+        # if DEBUG:
+            print("_"*80)
+            print('Finished iteration ' + str(time))
             print_stats(vCPU, avidians)
             # for debugger in debuggers:
             #     if debugger.avidian.is_alive:

@@ -120,22 +120,20 @@ class ReproductionCenter():
     # mutate genome according to config variables
     def _mutate_genome(self, genome):
 
-        # with small probability 5 times, change one of the instructions
-        for _ in range(self.config.instruction_mutation_chances):
-            for i in range(len(genome)):
-                rand = random.random()
-                if rand < self.config.instruction_mutation_rate:
-                    genome[i] = self.instruction_set[random.randint(0, 25)]
+        # for each instruction, small probability of error in copy
+        for i in range(len(genome)):
+            rand = random.random()
+            if rand < self.config.mutation_error_rate_per_instruction:
+                genome[i] = self.instruction_set[random.randint(0, 25)]
 
-        # with small probability 5 times, change length of genome by 1
-        for _ in range(self.config.genome_length_mutation_chances):
-            if random.random() < self.config.genome_mutation_rate:
-                # 50% chance of deleting a random instruction
-                if random.random() < 0.5:
-                    del genome[random.randint(0, len(genome) - 1)]
-                # 50% chance of inserting a new random instruction at a random point
-                else:
-                    genome.insert(random.randint(0, len(genome)), self.instruction_set[random.randint(0, 25)])
+        # for each genome, small probability of a deletion or insertion
+        if random.random() < self.config.single_instruction_insertion_or_deletion_rate:
+            # 50% chance of deleting a random instruction
+            if random.random() <= 0.5:
+                del genome[random.randint(0, len(genome) - 1)]
+            # 50% chance of inserting a new random instruction at a random point
+            else:
+                genome.insert(random.randint(0, len(genome)), self.instruction_set[random.randint(0, 25)])
 
         return genome
 
@@ -152,6 +150,7 @@ class ReproductionCenter():
         genome2 = genome2[pivot2:] + genome2[:pivot2]
 
         # cut each parent genome to maintain about half of its instructions
+        # this integer division may be causing a decrease in average genome length
         genome1_new_length = random.randint(genome1_length // 2 - self.config.genome_length_variability, genome1_length // 2 + self.config.genome_length_variability)
         genome1 = genome1[:genome1_new_length]
         genome2_new_length = random.randint(genome2_length // 2 - self.config.genome_length_variability, genome2_length // 2 + self.config.genome_length_variability)

@@ -23,6 +23,8 @@ class Avidian:
         if reproduction_type == REPRODUCTION_TYPE(3):
             self.sex = 'M' if random.random() > 0.5 else 'F'
 
+        # initialize generated genome
+        self.genome = genome_instructions
         # creating variable for copy of instructions to child genome
         self.child_genome = []
         # keep track of who is the parent (tuple of one or two ids)
@@ -30,8 +32,8 @@ class Avidian:
 
         # digital organism energy, allow for some variation
         self.SIPS = random.randint(self.config.initial_sips - self.config.intial_sips_variation, self.config.initial_sips + self.config.intial_sips_variation)
-        self.computational_merit = random.randint(self.config.initial_computational_merit - self.config.initial_computational_merit_variation,
-                                                    self.config.initial_computational_merit + self.config.initial_computational_merit_variation)
+        self.computational_merit = random.randint(len(self.genome) - self.config.initial_computational_merit_variation,
+                                                    len(self.genome) + self.config.initial_computational_merit_variation)
 
         # stacks
         self.stack1 = []
@@ -42,9 +44,6 @@ class Avidian:
         self.register_A = Register(self.env.generate_environment())
         self.register_B = Register(self.env.generate_environment())
         self.register_C = Register(self.env.generate_environment())
-
-        # initialize generated genome
-        self.genome = genome_instructions
 
         # organism pointers
         self.instruction_pointer = 0

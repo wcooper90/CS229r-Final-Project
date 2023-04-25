@@ -2,6 +2,7 @@ import random
 from .helpers import *
 import sys
 from pathlib import Path
+import copy
 import os
 # set path to parent directory to be able to import configuration values
 sys.path.append(Path().parent.parent)
@@ -18,7 +19,7 @@ def nand(avidian):
         b = avidian.register_B.val[i]
         c = avidian.register_C.val[i]
         # bitwise nand operation
-        if b and c == '1':
+        if b == '1' and c == '1':
             out += '0'
         else:
             out += '1'
@@ -242,7 +243,6 @@ def h_search(avidian):
 
 
 # allocates additional memory for organism up to maximum use for its offspring
-### how do we use this? Do we even need it in Python?
 def h_alloc(avidian):
     # access to config values
     config = CONFIGURATION()
@@ -275,12 +275,17 @@ def h_copy(avidian):
     # copy over the genome directly if Avidian is is_fertile
     # Mutations will be handled by the ReproductionCenter object once this copied genome is registered by h_divide
     if avidian.is_fertile:
-        avidian.child_genome = avidian.genome
+        avidian.child_genome = copy.copy(avidian.genome)
 
 
 # move instruction pointer to where flow head is pointing
 def mov_head(avidian):
-    avidian.instruction_pointer = avidian.flow_head
+    # with some small probability jump to a new location so genomes don't get stuck in loops
+    # if random.random() < avidian.config.head_random_probability:
+    #     avidian.instruction_pointer = random.randint(0, len(avidian.genome) - 1)
+    # else:
+    #     avidian.instruction_pointer = avidian.flow_head
+    pass
 
 
 # move specified pointer forward to another spot in memory according to contents of CX
@@ -293,15 +298,17 @@ def jmp_head(avidian):
 
     # depending on if there is a nop operation, change the corresponding head by c
     # the mod function is to wrap the pointer around if the value is too big
-    if head == "IP":
-        avidian.instruction_pointer += c
-        avidian.instruction_pointer %= len(avidian.genome)
-    elif head == "RH":
-        avidian.read_head += c
-        avidian.read_head %= len(avidian.genome)
-    else:
-        avidian.write_head += c
-        avidian.write_head %= len(avidian.genome)
+    # complete this action 1 - head_random_probability, otherwise jmp_head does nothing
+    if random.random() > avidian.config.head_random_probability:
+        if head == "IP":
+            avidian.instruction_pointer += c
+            avidian.instruction_pointer %= len(avidian.genome)
+        elif head == "RH":
+            avidian.read_head += c
+            avidian.read_head %= len(avidian.genome)
+        else:
+            avidian.write_head += c
+            avidian.write_head %= len(avidian.genome)
 
 
 # instruction set was not super clear about this.
