@@ -31,7 +31,11 @@ class Avidian:
         self.parents = parents
 
         # digital organism energy, allow for some variation
-        self.SIPS = random.randint(self.config.initial_sips - self.config.intial_sips_variation, self.config.initial_sips + self.config.intial_sips_variation)
+        # assigned proportionately to length of genome (with some variation) to maintain average lifespan
+        self.SIPS = random.randint(len(self.genome) * self.config.initial_average_life_span - self.config.intial_sips_variation,
+                                        len(self.genome) * self.config.initial_average_life_span + self.config.intial_sips_variation)
+        # because different Avidians are initialized with different genome lengths, computational merit is
+        # assigned proportionately to length of genome (with some variation) to maintain average lifespan
         self.computational_merit = random.randint(len(self.genome) - self.config.initial_computational_merit_variation,
                                                     len(self.genome) + self.config.initial_computational_merit_variation)
 

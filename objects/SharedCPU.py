@@ -96,4 +96,11 @@ class SharedCPU:
                     avidian.computational_merit *= reward
                     avidian.operands_achieved.append(func)
                     # give this avidian some extra sips, proportional to increase in computational merit
-                    avidian.SIPS += avidian.SIPS * (reward ** 2)
+                    avidian.SIPS += avidian.SIPS * reward * 2
+                # specifically for the not function, check its results on the second environment input as well
+                elif func == not_ and step_result == func(env_input_2, env_input_1):
+                    # print("Avidian " + str(avidian.id) + " achieved " + str(func.__name__) + "!")
+                    avidian.computational_merit *= reward
+                    avidian.operands_achieved.append(func)
+                    # give this avidian some extra sips, proportional to increase in computational merit
+                    avidian.SIPS += avidian.SIPS * reward * 2

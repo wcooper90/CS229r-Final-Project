@@ -5,8 +5,6 @@ from analysis.stats_printer import print_stats
 import numpy as np
 import random
 
-DEBUG = False
-
 
 def run_simulation(avidians, vCPU, t_end, reproduction_center, data_tracker=None):
 
@@ -26,6 +24,9 @@ def run_simulation(avidians, vCPU, t_end, reproduction_center, data_tracker=None
 
     # array for info for new offspring to be stored
     new_avidians_info = []
+
+    # no longer need to keep track of dead avidians
+    alive_avidians = []
 
     # main loop
     while time < t_end:
@@ -59,14 +60,14 @@ def run_simulation(avidians, vCPU, t_end, reproduction_center, data_tracker=None
 
         # if the maximum population has been reached, delete some fraction of instances in new_avidians_info each time step
         else:
-            new_avidians_info = new_avidians_info[:len(new_avidians_info) // 2]
+            # new_avidians_info = [new_avidians_info[:len(new_avidians_info) // 2]]
+            new_avidians_info = []
 
         # increment time
         time += 1
 
         # debugging space
-        if time % 10 == 0:
-        # if DEBUG:
+        if time % 100 == 0:
             print("_"*80)
             print('Finished iteration ' + str(time))
             print_stats(vCPU, avidians)

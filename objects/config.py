@@ -6,15 +6,17 @@ class CONFIGURATION:
     # these 3 parameters are also in main.py
     SIMULATION_LENGTH = 1000
     INITIAL_GENOME_LENGTH = 50
-    NUM_ANCESTORS = 100
+    NUM_ANCESTORS = 10
 
     # population cap; probability of children in a time step being born is (maximum_population - alive avidians) / maximum_population
-    maximum_population = 1000
+    maximum_population = 100
 
     # initial SIPs per Avida ancestor
     # currently set to 30 times the genome length of avidians
     # in other words, primative Avidians have an average life span of 30 iterations
     initial_sips = 50 * 30
+
+    initial_average_life_span = 30
 
     # avidians will be initialized with initial_sips +/- initial_sips_variation, for variation in lifespan
     intial_sips_variation = 50 * 4
@@ -49,7 +51,3 @@ class CONFIGURATION:
 
     # number of time steps required before reproducing again
     reproduction_cooldown = 2
-
-    # probability that mov_head or jmp_head instruction do nothing
-    # to prevent asexual avidians in particular from converging to a loop
-    head_random_probability = 0.01

@@ -139,6 +139,7 @@ class ReproductionCenter():
 
 
     # combine genomes of two sexually reproducing avidians randomly
+    # one-point crossover
     def _combine_genomes(self, genome1, genome2):
         combined_genome = None
         genome1_length, genome2_length = len(genome1), len(genome2)

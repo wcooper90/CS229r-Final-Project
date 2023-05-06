@@ -8,7 +8,7 @@ from objects.AuxFunctions.logic_operators import *
 
 
 def print_stats(vCPU, avidians):
-    print("Total number of Avidians: " + str(len(avidians)))
+    print("Total number of alive Avidians: " + str(len(avidians)))
     alive_avidians = [avidian for avidian in avidians if avidian.is_alive]
     print("Number of alive Avidians: " + str(len(alive_avidians)))
     avidians_with_complex_functions = []
@@ -43,8 +43,8 @@ def print_stats(vCPU, avidians):
 
         lengths_of_genomes.append(len(avidian.genome))
         ins_hist = [b[1] for b in avidian.instruction_history]
-        if h_alloc in ins_hist and h_copy in ins_hist and h_divide in ins_hist and avidian.is_alive:
-            healthy_avidians += 1
+        # if h_alloc in ins_hist and h_copy in ins_hist and h_divide in ins_hist and avidian.is_alive:
+        #     healthy_avidians += 1
     try:
         print("The average genome length of alive avidians is: " + str(sum(lengths_of_genomes) / len(lengths_of_genomes)))
     except:
@@ -52,4 +52,4 @@ def print_stats(vCPU, avidians):
         pass
     print("Number of alive avidians that have evolved complex functions: " + str(len(avidians_with_complex_functions)))
     print(complex_operand_avidians)
-    print("Number of alive avidians that can reproduce is: " + str(healthy_avidians))
+    # print("Number of alive avidians that can reproduce is: " + str(healthy_avidians))

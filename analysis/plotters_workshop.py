@@ -17,7 +17,6 @@ for i in range(num_avidians):
 """
 TODO: find out which complex functions are being achieved (if it actually proportionally matches computational merit rewards)
 TODO: find out if organisms which can complete complex functions are more likely to have a parent who can do the same
-TODO: fix reward system so organisms which complete complext functions live longer
 """
 
 capable = {}

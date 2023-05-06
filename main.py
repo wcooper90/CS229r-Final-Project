@@ -19,7 +19,7 @@ NUM_ANCESTORS = config.NUM_ANCESTORS
 
 # reproduction type can be ASEX (asexual), SEX_NO_SEXES (sexual but does not distinguish between male and female),
 # and SEX_WITH_SEXES (sexual, where only males and females are copatible)
-reproduction_type = REPRODUCTION_TYPE.ASEX
+reproduction_type = REPRODUCTION_TYPE.SEX_WITH_SEXES
 
 # environment generates random binary strings as inputs for Avidians
 env = Environment()
