@@ -4,12 +4,12 @@ class CONFIGURATION:
     debugging = True
 
     # these 3 parameters are also in main.py
-    SIMULATION_LENGTH = 20000
+    SIMULATION_LENGTH = 1001
     INITIAL_GENOME_LENGTH = 50
     NUM_ANCESTORS = 10
 
     # population cap; probability of children in a time step being born is (maximum_population - alive avidians) / maximum_population
-    maximum_population = 200
+    maximum_population = 50
 
     # initial SIPs per Avida ancestor
     # currently set to 30 times the genome length of avidians
@@ -51,3 +51,6 @@ class CONFIGURATION:
 
     # number of time steps required before reproducing again
     reproduction_cooldown = 2
+
+    # how often to plot and print a snapshot of the system
+    interval = 200

@@ -1,13 +1,19 @@
 from objects.Environment import Environment
 from objects.DebugAvidian import DebugAvidian
 from objects.config import CONFIGURATION
-from analysis.stats_printer import print_stats
-from objects.AuxFunctions.helpers import *
+from analysis.stats_printer import snapshot_plot, track_stats, plot
 import numpy as np
 import random
 
 
 def run_simulation(avidians, vCPU, t_end, reproduction_center, data_tracker=None):
+
+    # data to plot
+    data = {"avg_genome_length":[], "avg_generation":[], "percent_complex_features":[],
+            'max_genome_length': [], 'min_genome_length': [],
+            "max_generation": [], "min_generation": [], 'avg_computational_merit': [],
+            'min_computational_merit': [], 'max_computational_merit': []}
+
 
     config = CONFIGURATION()
     time = 0
@@ -44,7 +50,7 @@ def run_simulation(avidians, vCPU, t_end, reproduction_center, data_tracker=None
             avidian.time_step += 1
 
         # alive avidians
-        num_alive_avidians = len(list(filter(lambda avidian: avidian.is_alive, avidians)))
+        num_alive_avidians = len([1 for avidian in avidians if avidian.is_alive])
 
         # probability of successful set of child objects created
         prob_child_success = max((config.maximum_population - num_alive_avidians) / config.maximum_population, 0)
@@ -64,15 +70,24 @@ def run_simulation(avidians, vCPU, t_end, reproduction_center, data_tracker=None
             # new_avidians_info = [new_avidians_info[:len(new_avidians_info) // 2]]
             new_avidians_info = []
 
+
+
+        # debugging space
+        if time % config.interval == 0:
+            print("_"*80)
+            print('Finished iteration ' + str(time))
+            snapshot_plot(vCPU, avidians, time)
+            track_stats(vCPU, avidians, data)
+            # for debugger in debuggers:
+            #     if debugger.avidian.is_alive:
+            #         print(debugger.avidian.generation)
+                    # debugger._print_instruction_history()
+                    # debugger._print_reproductive_capacity()
+
         # increment time
         time += 1
 
-        # debugging space
-        if time % 100 == 0:
-            print("_"*80)
-            print('Finished iteration ' + str(time))
-            print_stats(vCPU, avidians)
-            # for debugger in debuggers:
-            #     if debugger.avidian.is_alive:
-            #         debugger._print_instruction_history()
-            #         debugger._print_reproductive_capacity()
+    plot(data)
+
+    # for key in data.keys():
+    #     print(data[key])

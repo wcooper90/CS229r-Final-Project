@@ -38,7 +38,7 @@ class ReproductionCenter():
             # mutate genome
             mutated_genome = self._mutate_genome(values[0])
             # create new object
-            new_avidian_object = Avidian(vCPU.num_avidians, mutated_genome, values[1], self.reproduction_type, (values[3]), time)
+            new_avidian_object = Avidian(vCPU.num_avidians, mutated_genome, values[1], self.reproduction_type, (values[3]), time, values[4])
             new_avidians.append(new_avidian_object)
             vCPU.num_avidians += 1
         # return the list of new avidian objects and an empty list, because in asexual reproduction
@@ -55,9 +55,10 @@ class ReproductionCenter():
             if len(compatible) == 1:
                 # if there is a compatible partner, combine genomes, mutate, and create child obejct
                 new_genome = self._combine_genomes(new_avidians_info[counter][0], compatible[0][0])
+                generation = min(new_avidians_info[counter][4], compatible[0][4])
                 mutated_genome = self._mutate_genome(new_genome)
                 new_avidian_object = Avidian(vCPU.num_avidians, mutated_genome, new_avidians_info[counter][1],
-                                                self.reproduction_type, (new_avidians_info[counter][3], compatible[0][3]), time)
+                                                self.reproduction_type, (new_avidians_info[counter][3], compatible[0][3]), time, generation)
                 new_avidians.append(new_avidian_object)
                 vCPU.num_avidians += 1
                 compatible = []
@@ -77,6 +78,7 @@ class ReproductionCenter():
         counter = 0
         while counter < len(new_avidians_info):
             new_genome = None
+            generation = None
             if len(compatible) > 0:
                 # if we find a match, delete compatible flag will be set to True and corresponding object will be removed from compatible list
                 delete_compatible_object_flag = False
@@ -84,11 +86,13 @@ class ReproductionCenter():
                 for i, values in enumerate(compatible):
                     if new_avidians_info[counter][2] == 'M' and values[2] == 'F':
                         new_genome = self._combine_genomes(new_avidians_info[counter][0], compatible[0][0])
+                        generation = min(new_avidians_info[counter][4], compatible[0][4])
                         delete_compatible_object_flag = True
                         delete_object_idx = i
                         break
                     elif new_avidians_info[counter][2] == 'F' and values[2] == 'M':
                         new_genome = self._combine_genomes(new_avidians_info[counter][0], compatible[0][0])
+                        generation = min(new_avidians_info[counter][4], compatible[0][4])
                         delete_compatible_object_flag = True
                         delete_object_idx = i
                         break
@@ -97,7 +101,7 @@ class ReproductionCenter():
                 if delete_compatible_object_flag:
                     mutated_genome = self._mutate_genome(new_genome)
                     new_avidian_object = Avidian(vCPU.num_avidians, mutated_genome, values[1],
-                                                    self.reproduction_type, (new_avidians_info[counter][3], compatible[i][3]), time)
+                                                    self.reproduction_type, (new_avidians_info[counter][3], compatible[i][3]), time, generation)
                     new_avidians.append(new_avidian_object)
                     del compatible[delete_object_idx]
                     vCPU.num_avidians += 1

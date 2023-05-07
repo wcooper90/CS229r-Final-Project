@@ -52,7 +52,7 @@ class SharedCPU:
             if step_result:
                 new_avidian_genome = self._avidian_time_step_result_handler(avidian, step_result)
                 if new_avidian_genome:
-                    child_avidian_info = [new_avidian_genome, env, avidian.sex, avidian.id]
+                    child_avidian_info = [new_avidian_genome, env, avidian.sex, avidian.id, avidian.generation + 1]
                     new_offspring_info.append(child_avidian_info)
 
             # update instruction pointer (wrap around if necessary), update SIPs

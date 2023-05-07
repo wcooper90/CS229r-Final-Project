@@ -6,7 +6,7 @@ import random
 
 class Avidian:
 
-    def __init__(self, id, genome_instructions, env, reproduction_type, parents=None, time_step=0):
+    def __init__(self, id, genome_instructions, env, reproduction_type, parents=None, time_step=0, generation=0):
         # configuration
         self.config = CONFIGURATION
         self.id = id
@@ -17,6 +17,7 @@ class Avidian:
         self.is_alive = True
         self.is_fertile = False
         self.reproduction_type = reproduction_type
+        self.generation = generation
 
         # if simulation type is reproduction separated by sex, assign sex randomly
         self.sex = None
