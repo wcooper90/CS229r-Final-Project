@@ -13,7 +13,7 @@ from objects.Avidian import Avidian
 # nand logical operator, only logical operator as a genome instruction
 def nand(avidian):
     # check for nops
-    register, _ = check_nop(avidian)
+    register, _ = check_nop(avidian, 'nand')
     out = ""
     for i in range(len(avidian.register_A.val)):
         b = avidian.register_B.val[i]
@@ -29,15 +29,19 @@ def nand(avidian):
 # if specified register's value not equal to its complement, skip the next instruction
 def if_n_equ(avidian):
     # find appropriate register
-    register, _ = check_nop(avidian)
+    register, _ = check_nop(avidian, 'if_n_equ')
 
-    # find binary complement
-    complement = ""
-    for i in range(avidian.config.register_length):
-        complement += '0' if register.val[i] == 1 else '1'
+    # find complement
+    complement = None
+    if register is avidian.register_A:
+        complement = avidian.register_B
+    elif register is avidian.register_B:
+        complement = avidian.register_C
+    else:
+        complement = avidian.register_A
 
     # check for equality
-    complement = int(complement, 2)
+    complement = int(complement.val, 2)
     val = int(register.val, 2)
     if val != complement:
         avidian.instruction_pointer += 1
@@ -50,15 +54,19 @@ def if_n_equ(avidian):
 # if specified register value is larger than its complement, skip the next instruction
 def if_less(avidian):
     # find appropriate register
-    register, _ = check_nop(avidian)
+    register, _ = check_nop(avidian, 'if_less')
 
-    # find binary complement
-    complement = ""
-    for i in range(avidian.config.register_length):
-        complement += '0' if register.val[i] == 1 else '1'
+    # find complement
+    complement = None
+    if register is avidian.register_A:
+        complement = avidian.register_B
+    elif register is avidian.register_B:
+        complement = avidian.register_C
+    else:
+        complement = avidian.register_A
 
     # check for inequality
-    complement = int(complement, 2)
+    complement = int(complement.val, 2)
     val = int(register.val, 2)
     if val >= complement:
         avidian.instruction_pointer += 1
@@ -71,7 +79,7 @@ def if_less(avidian):
 def pop(avidian):
 
     # calculate appropiate register
-    register, _ = check_nop(avidian)
+    register, _ = check_nop(avidian, 'pop')
 
     if avidian.active_stack == 1:
         try:
@@ -90,7 +98,7 @@ def pop(avidian):
 # push contents of BX register into active stack
 def push(avidian):
     # calculate appropiate register
-    register, _ = check_nop(avidian)
+    register, _ = check_nop(avidian, 'push')
 
     if avidian.active_stack == 1:
         avidian.stack1.append(register.val)
@@ -108,49 +116,42 @@ def swap_stk(avidian):
 
 # replace value in specified register with its complement
 def swap(avidian):
-    # check for corret register
-    register, _ = check_nop(avidian)
-    complement = ""
-    # calculate complement
-    for i in range(avidian.config.register_length):
-        if register.val[i] == '1':
-            complement += '0'
-        else:
-            complement += '1'
-    register.val = complement
+    # check for correct register
+    register, _ = check_nop(avidian, 'swap')
+
+    # find complement
+    complement = None
+    if register is avidian.register_A:
+        complement = avidian.register_B
+    elif register is avidian.register_B:
+        complement = avidian.register_C
+    else:
+        complement = avidian.register_A
+
+    tmp = register.val
+    register.val = complement.val
+    complement.val = tmp
 
 
 # shift bits 1 to the right in specified register
 def shift_r(avidian):
     # check for appropriate register
-    register, _ = check_nop(avidian)
+    register, _ = check_nop(avidian, 'shift_r')
 
-    # start with 0 as output
-    out = "0"
-    # copy [:-1] register contents to the rest of new register string
-    for i in range(0, avidian.config.register_length - 1):
-        out += register.val[i]
-    # set val
-    register.val = out
+    register.val = '0' + register.val[0:(avidian.config.register_length - 1)]
 
 
 # shift bits 1 to the left in specified register
 def shift_l(avidian):
     # check for appropriate register
-    register, _ = check_nop(avidian)
+    register, _ = check_nop(avidian, 'shift_l')
 
-    # copy [1:] values to new string
-    out = ""
-    for i in range(1, avidian.config.register_length):
-        out += register.val[i]
-    # append 0 on the very end
-    out += "0"
-    register.val = out
+    register.val = register.val[1:(avidian.config.register_length)] + '0'
 
 
 # increments specified register's value by 1
 def inc(avidian):
-    register, _ = check_nop(avidian)
+    register, _ = check_nop(avidian, 'inc')
     # convert to int, add 1, convert back to binary and standardize
     register.val = standardize_register_value_length('{0:b}'.format(int(register.val, 2) + 1), avidian.config.register_length)
 
@@ -158,7 +159,7 @@ def inc(avidian):
 # add values of B and C and put sum into specified register
 def add(avidian):
     # pick appropriate register
-    register, _ = check_nop(avidian)
+    register, _ = check_nop(avidian, 'add')
     # register values as integers
     b, c = int(avidian.register_B.val, 2), int(avidian.register_C.val, 2)
     # add values and update new register's value
@@ -166,7 +167,7 @@ def add(avidian):
 
 # decrements specified register's value by 1
 def dec(avidian):
-    register, _ = check_nop(avidian)
+    register, _ = check_nop(avidian, 'dec')
     # convert to int, subtract 1, convert back to binary and standardize
     register.val = standardize_register_value_length('{0:b}'.format(int(register.val, 2) - 1), avidian.config.register_length)
 
@@ -174,7 +175,7 @@ def dec(avidian):
 # subtract register c value from register b value and input into specified register
 def sub(avidian):
     # check for output register
-    register, _ = check_nop(avidian)
+    register, _ = check_nop(avidian, 'sub')
     # subtraction
     b, c = int(avidian.register_B.val, 2), int(avidian.register_C.val, 2)
     # standardize length of this integer output
@@ -186,7 +187,7 @@ def sub(avidian):
 # output value from a register, generate a new input from environment to go into the register
 def IO(avidian):
     # check which register to operate on
-    register, _ = check_nop(avidian)
+    register, _ = check_nop(avidian, 'IO')
     # set return to correct register contents
     out = register.val
     # register is now replaced with the next environment variable in line
@@ -239,7 +240,13 @@ def if_label(avidian):
 
 # will be implemented with the above description soon, but don't see a real need for it now...
 def h_search(avidian):
-    pass
+    complement = check_template(avidian)
+    if complement:
+        find_complement(avidian, complement)
+    else:
+        avidian.register_B.val = '0' * 32
+        avidian.register_C.val = '0' * 32
+        avidian.flow_head = avidian.instruction_pointer + 1
 
 
 # allocates additional memory for organism up to maximum use for its offspring
@@ -280,14 +287,20 @@ def h_copy(avidian):
 
 # move instruction pointer to where flow head is pointing
 def mov_head(avidian):
-    avidian.instruction_pointer = avidian.flow_head
+    _, head = check_nop(avidian, 'mov_head')
+    if head == 'IP':
+        avidian.instruction_pointer = avidian.flow_head
+    elif head == 'RH':
+        avidian.read_head = avidian.flow_head
+    else:
+        avidian.write_head = avidian.flow_head
 
 
 
 # move specified pointer forward to another spot in memory according to contents of CX
 def jmp_head(avidian):
     # check for nops, update returned pointer
-    _, head = check_nop(avidian)
+    _, head = check_nop(avidian, 'jmp_head')
 
     # calculate integer value for c
     c = int(avidian.register_C.val, 2)
@@ -309,7 +322,7 @@ def jmp_head(avidian):
 # write the position of a specified head into a specified register
 def get_head(avidian):
     # find appropriate register
-    register, head = check_nop(avidian)
+    register, head = check_nop(avidian, get_head)
 
     # find the specified head's value
     head_value = None
@@ -327,7 +340,7 @@ def get_head(avidian):
 # moves flow head to point at instruction denoted by specified register
 def set_flow(avidian):
     # calculate appropriate register
-    register, _ = check_nop(avidian)
+    register, _ = check_nop(avidian, 'set_flow')
 
     # wrap around if longer than current genome
     val = int(register.val, 2) % len(avidian.genome)

@@ -2,6 +2,7 @@ from objects.Environment import Environment
 from objects.DebugAvidian import DebugAvidian
 from objects.config import CONFIGURATION
 from analysis.stats_printer import print_stats
+from objects.AuxFunctions.helpers import *
 import numpy as np
 import random
 
@@ -43,7 +44,7 @@ def run_simulation(avidians, vCPU, t_end, reproduction_center, data_tracker=None
             avidian.time_step += 1
 
         # alive avidians
-        num_alive_avidians = len([1 for avidian in avidians if avidian.is_alive])
+        num_alive_avidians = len(list(filter(lambda avidian: avidian.is_alive, avidians)))
 
         # probability of successful set of child objects created
         prob_child_success = max((config.maximum_population - num_alive_avidians) / config.maximum_population, 0)

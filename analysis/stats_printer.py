@@ -5,11 +5,12 @@ import os
 sys.path.append(Path().parent)
 from objects.AuxFunctions.instructions import *
 from objects.AuxFunctions.logic_operators import *
+from objects.AuxFunctions.helpers import *
 
 
 def print_stats(vCPU, avidians):
-    print("Total number of alive Avidians: " + str(len(avidians)))
-    alive_avidians = [avidian for avidian in avidians if avidian.is_alive]
+    print("Total number of Avidians: " + str(len(avidians)))
+    alive_avidians = list(filter(lambda avidian: avidian.is_alive, avidians))
     print("Number of alive Avidians: " + str(len(alive_avidians)))
     avidians_with_complex_functions = []
     lengths_of_genomes = []
