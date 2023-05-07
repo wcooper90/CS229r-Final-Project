@@ -104,3 +104,15 @@ class SharedCPU:
                     avidian.operands_achieved.append(func)
                     # give this avidian some extra sips, proportional to increase in computational merit
                     avidian.SIPS += avidian.SIPS * reward * 2
+                elif func == or_n_ and step_result == func(env_input_2, env_input_1):
+                    # print("Avidian " + str(avidian.id) + " achieved " + str(func.__name__) + "!")
+                    avidian.computational_merit *= reward
+                    avidian.operands_achieved.append(func)
+                    # give this avidian some extra sips, proportional to increase in computational merit
+                    avidian.SIPS += avidian.SIPS * reward * 2
+                elif func == and_n_ and step_result == func(env_input_2, env_input_1):
+                    # print("Avidian " + str(avidian.id) + " achieved " + str(func.__name__) + "!")
+                    avidian.computational_merit *= reward
+                    avidian.operands_achieved.append(func)
+                    # give this avidian some extra sips, proportional to increase in computational merit
+                    avidian.SIPS += avidian.SIPS * reward * 2

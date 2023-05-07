@@ -91,7 +91,7 @@ def snapshot_plot(vCPU, avidians, time):
                 num_complex_operands[num_complex_functions] += 1
 
         lengths_of_genomes.append(len(avidian.genome))
-        ins_hist = [b[1] for b in avidian.instruction_history]
+        # ins_hist = [b[1] for b in avidian.instruction_history]
         # if h_alloc in ins_hist and h_copy in ins_hist and h_divide in ins_hist and avidian.is_alive:
         #     healthy_avidians += 1
     try:

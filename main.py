@@ -53,4 +53,4 @@ vCPU = SharedCPU(NUM_ANCESTORS, reproduction_type)
 # run simulation with data tracker
 # run_simulation(avidians, vCPU, SIMULATION_LENGTH, reproduction_center, data_tracker)
 # run simulation without data tracker
-run_simulation(avidians, vCPU, SIMULATION_LENGTH, reproduction_center)
+run_simulation(avidians, vCPU, SIMULATION_LENGTH, reproduction_center, threads=4)
