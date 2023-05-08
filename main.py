@@ -19,7 +19,7 @@ NUM_ANCESTORS = config.NUM_ANCESTORS
 
 # reproduction type can be ASEX (asexual), SEX_NO_SEXES (sexual but does not distinguish between male and female),
 # and SEX_WITH_SEXES (sexual, where only males and females are copatible)
-reproduction_type = REPRODUCTION_TYPE.SEX_WITH_SEXES
+reproduction_type = REPRODUCTION_TYPE.SEX_NO_SEXES
 
 # environment generates random binary strings as inputs for Avidians
 env = Environment()
@@ -53,4 +53,4 @@ vCPU = SharedCPU(NUM_ANCESTORS, reproduction_type)
 # run simulation with data tracker
 # run_simulation(avidians, vCPU, SIMULATION_LENGTH, reproduction_center, data_tracker)
 # run simulation without data tracker
-run_simulation(avidians, vCPU, SIMULATION_LENGTH, reproduction_center, threads=4)
+run_simulation(avidians, vCPU, SIMULATION_LENGTH, reproduction_center, threads=3)

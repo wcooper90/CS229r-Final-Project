@@ -41,12 +41,11 @@ def track_stats(vCPU, avidians, data):
         data['max_computational_merit'].append(max(computational_merit))
 
 
-def snapshot_plot(vCPU, avidians, time):
-    print("Total number of alive Avidians: " + str(len(avidians)))
-    alive_avidians = [avidian for avidian in avidians if avidian.is_alive]
+def snapshot_plot(vCPU, alive_avidians, time):
     print("Number of alive Avidians: " + str(len(alive_avidians)))
     avidians_with_complex_functions = []
     lengths_of_genomes = []
+    merit = []
     healthy_avidians = 0
     complex_operand_avidians = {"not_": 0, "nand_": 0, "and_": 0,
                                     "or_n_":0, "or_": 0, "and_n_":0,
@@ -55,6 +54,7 @@ def snapshot_plot(vCPU, avidians, time):
     num_complex_operands = {1: 0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0}
 
     for avidian in alive_avidians:
+        merit.append(avidian.computational_merit)
         if avidian.operands_achieved:
             avidians_with_complex_functions.append(str(avidian.id))
             num_complex_functions = 0
@@ -100,6 +100,7 @@ def snapshot_plot(vCPU, avidians, time):
         # no avidians are alive to have their genome lengths measured
         pass
     print("Number of alive avidians that have evolved complex functions: " + str(len(avidians_with_complex_functions)))
+    print("Average computational merit: " + str(sum(merit) / len(merit)))
     print(complex_operand_avidians)
     # print("Number of alive avidians that can reproduce is: " + str(healthy_avidians))
 
@@ -107,12 +108,16 @@ def snapshot_plot(vCPU, avidians, time):
     if not all(value == 0 for value in complex_operand_avidians.values()):
         plt.bar(range(len(complex_operand_avidians)), list(complex_operand_avidians.values()), align='center')
         plt.xticks(range(len(complex_operand_avidians)), list(complex_operand_avidians.keys()))
+        plt.xlabel('Complex Function Name', fontsize=12)
+        plt.ylabel('Occurences', fontsize=12)
         plt.savefig("analysis/plots/snapshots/snapshot_funcs" + str(time) + ".png")
         plt.clf()
 
     if not all(value == 0 for value in num_complex_operands.values()):
         plt.bar(range(len(num_complex_operands)), list(num_complex_operands.values()), align='center')
         plt.xticks(range(len(num_complex_operands)), list(num_complex_operands.keys()))
+        plt.xlabel('Number of Complex Functions', fontsize=12)
+        plt.ylabel('Number of Avidians', fontsize=12)
         plt.savefig("analysis/plots/snapshots/snapshot_num_funcs" + str(time) + ".png")
         plt.clf()
 
@@ -153,3 +158,5 @@ def plot(data):
     plt.ylabel('Computational Merit', fontsize=12)
     plt.savefig("analysis/plots/computational_merit.png")
     plt.clf()
+
+    print(data)

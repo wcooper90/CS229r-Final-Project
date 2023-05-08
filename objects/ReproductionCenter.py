@@ -154,11 +154,24 @@ class ReproductionCenter():
         genome1 = genome1[pivot1:] + genome1[:pivot1]
         genome2 = genome2[pivot2:] + genome2[:pivot2]
 
+
+        # if genome lengths are uneven, change them to the nearest even number with equal probability 
+        if genome1_length % 2 == 1:
+            if random.random() < 0.5:
+                genome1_length += 1
+            else:
+                genome1_length -= 1
+        if genome2_length % 2 == 1:
+            if random.random() < 0.5:
+                genome2_length += 1
+            else:
+                genome2_length -= 1
+
         # cut each parent genome to maintain about half of its instructions
         # this integer division may be causing a decrease in average genome length
-        genome1_new_length = random.randint(genome1_length // 2 - self.config.genome_length_variability, genome1_length // 2 + self.config.genome_length_variability)
+        genome1_new_length = random.randint(genome1_length // 2 - self.config.genome_length_variability + 1, genome1_length // 2 + self.config.genome_length_variability)
         genome1 = genome1[:genome1_new_length]
-        genome2_new_length = random.randint(genome2_length // 2 - self.config.genome_length_variability, genome2_length // 2 + self.config.genome_length_variability)
+        genome2_new_length = random.randint(genome2_length // 2 - self.config.genome_length_variability + 1, genome2_length // 2 + self.config.genome_length_variability)
         genome2 = genome2[:genome2_new_length]
 
         # randomly select order in which genomes are combined

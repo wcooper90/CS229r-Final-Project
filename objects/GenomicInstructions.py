@@ -42,9 +42,9 @@ class GenomicInstructions:
         genome_sequence = []
 
         # only iterate for genome_length - 3 because we append the 3 replication instructions at the end
-        for i in range(genome_length - 6):
+        for i in range(genome_length - 3):
             # index 3 is the nopC command, as specified by the Lenski paper
             genome_sequence.append(nopC)
 
-        genome_sequence = [h_alloc, h_copy, h_divide] + genome_sequence + [h_alloc, h_copy, h_divide]
+        genome_sequence = [h_alloc, h_copy, h_divide] + genome_sequence
         return genome_sequence

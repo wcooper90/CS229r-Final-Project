@@ -63,7 +63,7 @@ def run_simulation(avidians, vCPU, t_end, reproduction_center, threads=2, data_t
         split_work = np.array_split(avidians, threads)
         thds = []
         for i in range(threads):
-            thd = threading.Thread(target=run_thread, args=(vCPU, split_work[i], env, new_avidians_info ))
+            thd = threading.Thread(target=run_thread, args=(vCPU, split_work[i], env, new_avidians_info, ))
             thd.start()
             thds.append(thd)
 
